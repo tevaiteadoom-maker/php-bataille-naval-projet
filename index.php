@@ -1,30 +1,73 @@
+<?php
+session_start();
+
+$fichier = "etat_joueurs.json";
+
+// Si le fichier n'existe pas → création
+if (!file_exists($fichier)) {
+    file_put_contents($fichier, json_encode(["j1" => null, "j2" => null]));
+}
+
+// Charger l'état
+$etat = json_decode(file_get_contents($fichier), true);
+
+function save_state($file, $data) {
+    file_put_contents($file, json_encode($data));
+}
+
+// Assigner Joueur 1
+if (isset($_POST["joueur1"])) {
+    if ($etat["j1"] === null) {
+        $etat["j1"] = session_id();
+        $_SESSION["role"] = "Joueur 1";
+        save_state($fichier, $etat);
+    }
+}
+
+// Assigner Joueur 2
+if (isset($_POST["joueur2"])) {
+    if ($etat["j2"] === null) {
+        $etat["j2"] = session_id();
+        $_SESSION["role"] = "Joueur 2";
+        save_state($fichier, $etat);
+    }
+}
+
+$role = $_SESSION["role"] ?? "Aucun rôle";
+
+header('refresh:5');
+?>
+
+
 <!DOCTYPE html>
-<html lang="fr">
+<html>
+  <head>
+      <meta charset="UTF-8">
+      <title>Joueur 1 / Joueur 2</title>
+  </head>
+  <body>
+    <h1>Connexion aux rôles</h1>
+    <h2>Votre rôle actuel : <strong><?= $role ?></strong></h2>
+    <p>
+      Joueur 1 : <?= $etat["j1"] ? "🟢 Occupé" : "🔴 Libre" ?><br>
+      Joueur 2 : <?= $etat["j2"] ? "🟢 Occupé" : "🔴 Libre" ?>
+    </p>
 
-<head>
-	<meta charset="UTF-8">
-	<meta name="description" content="Utilisation de grid areas">
-	<title>Bataille Navale</title>
-	<link rel="stylesheet" href="style.css">
-</head>
+    <form method = "post" >
+      <button type="submit" name="joueur1"
+          <?= $etat["j1"] !== null ? "disabled" : "" ?>>
+          🎮 Devenir Joueur 1
+      </button>
+      <button type="submit" name="joueur2"
+          <?= $etat["j2"] !== null ? "disabled" : "" ?>>
+          🎮 Devenir Joueur 2
+      </button>
+    </form>
 
-<body>
-	<main>
-        <?php 
-        $lines = 10;
-        $column = 10;
-
-        for ($i = 0; $i < $column; $i++) {
-            for ($j = 0; $j < $lines; $j++) {
-                $grid[] = 0;
-            }
-        }
-
-        var_dump($grid);
-            
-        
-        ?>
-    </main>
-</body>
-
+    <form method = "post" action="./reset_total.php">
+      <button type="submit" name="reset_total">
+          ❌ Fin de partie (RESET)
+      </button>
+    </form>
+  </body>
 </html>
