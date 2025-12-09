@@ -3,19 +3,21 @@ session_start();
 
 $fichier = "etat_joueurs.json";
 
-// Si le fichier n'existe pas → création
 if (!file_exists($fichier)) {
     file_put_contents($fichier, json_encode(["j1" => null, "j2" => null]));
 }
 
-// Charger l'état
 $etat = json_decode(file_get_contents($fichier), true);
+
+if ($etat["j1"] !== null && $etat["j2"] !== null) {
+    header("Location: game.php");
+    exit;
+}
 
 function save_state($file, $data) {
     file_put_contents($file, json_encode($data));
 }
 
-// Assigner Joueur 1
 if (isset($_POST["joueur1"])) {
     if ($etat["j1"] === null) {
         $etat["j1"] = session_id();
@@ -24,7 +26,6 @@ if (isset($_POST["joueur1"])) {
     }
 }
 
-// Assigner Joueur 2
 if (isset($_POST["joueur2"])) {
     if ($etat["j2"] === null) {
         $etat["j2"] = session_id();
