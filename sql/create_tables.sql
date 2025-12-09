@@ -1,22 +1,23 @@
-CREATE DATABASE biblio;
-USE biblio;
-
-CREATE TABLE bateaux (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    bateau_id INT NOT NULL, -- 1 à 4 selon le type
-    ligne INT NOT NULL,
-    colonne INT NOT NULL
+CREATE TABLE joueur1 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    score INT DEFAULT 0,
+    checked INT DEFAULT 0,
+    boat INT DEFAULT 0
 );
 
-CREATE TABLE hits (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    ligne INT NOT NULL,
-    colonne INT NOT NULL,
-    result ENUM('hit','miss') NOT NULL
+CREATE TABLE joueur2 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    score INT DEFAULT 0,
+    checked INT DEFAULT 0,
+    boat INT DEFAULT 0
 );
 
-CREATE TABLE scores (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    joueur VARCHAR(50),
-    victories INT DEFAULT 0
-);
+CREATE TABLE partie (id INT AUTO_INCREMENT PRIMARY KEY, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE grille (id INT AUTO_INCREMENT PRIMARY KEY, joueur_id INT, x INT, y INT, etat INT DEFAULT 0);
+
+INSERT INTO joueur1 (id, checked)
+VALUES
+(1, 0),
+(2, 0),
+(3, 0),
+(4, 0);

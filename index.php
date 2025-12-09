@@ -39,6 +39,3 @@ $role = $_SESSION["role"] ?? "Aucun rôle";
 header('refresh:4');
 include('./views/players_selected.php');
 ?>
-
-
-
