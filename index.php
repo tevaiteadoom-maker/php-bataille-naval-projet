@@ -10,7 +10,7 @@ if (!file_exists($fichier)) {
 $etat = json_decode(file_get_contents($fichier), true);
 
 if ($etat["j1"] !== null && $etat["j2"] !== null) {
-    header("Location: ./views/game.php");
+    header("Location: ./scripts/select_player.php");
     exit;
 }
 

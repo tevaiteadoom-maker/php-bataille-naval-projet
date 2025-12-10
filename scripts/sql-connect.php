@@ -11,7 +11,7 @@ class SqlConnect {
   public function __construct() {
     $this->host = '127.0.0.1';
     $this->port = '3306';
-    $this->dbname = 'battle';
+    $this->dbname = 'bataille_navale';
     $this->user = 'fidel';
     $this->password = 'password123';
 

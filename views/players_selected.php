@@ -12,7 +12,7 @@
       Joueur 2 : <?= $etat["j2"] ? "🟢 Occupé" : "🔴 Libre" ?>
     </p>
 
-    <form method = "post" >
+    <form method = "post">
       <button type="submit" name="joueur1"
           <?= $etat["j1"] !== null ? "disabled" : "" ?>>
           🎮 Devenir Joueur 1
