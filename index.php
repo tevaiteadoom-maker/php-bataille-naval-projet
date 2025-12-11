@@ -10,7 +10,7 @@ if (!file_exists($fichier)) {
 $etat = json_decode(file_get_contents($fichier), true);
 
 if ($etat["j1"] !== null && $etat["j2"] !== null) {
-    header("Location: ./scripts/select_player.php");
+    header("Location: ./scripts/add_player.php");
     exit;
 }
 
@@ -21,6 +21,7 @@ function save_state($file, $data) {
 if (isset($_POST["joueur1"])) {
     if ($etat["j1"] === null) {
         $etat["j1"] = session_id();
+        $_SESSION["player_id"] = 1;
         $_SESSION["role"] = "Joueur 1";
         save_state($fichier, $etat);
     }
@@ -29,6 +30,7 @@ if (isset($_POST["joueur1"])) {
 if (isset($_POST["joueur2"])) {
     if ($etat["j2"] === null) {
         $etat["j2"] = session_id();
+    $_SESSION["player_id"] = 2;
         $_SESSION["role"] = "Joueur 2";
         save_state($fichier, $etat);
     }
