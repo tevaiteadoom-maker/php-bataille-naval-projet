@@ -12,29 +12,23 @@ if (!isset($_SESSION["player_id"])) {
 $player_id = $_SESSION["player_id"];
 $name = $_SESSION["role"];
 
-// Crée ou met à jour le joueur
-$stmt = $sql->db->prepare("
-    INSERT INTO players (id, name, remaining_cells)
-    VALUES (:id, :name, :cells)
-    ON DUPLICATE KEY UPDATE
-    name = :name, remaining_cells = :cells
-");
+$stmt = $sql->db->prepare("INSERT INTO players (name, remaining_cells) VALUES (:name, :cells)");
 $stmt->execute([
-    'id' => $player_id,
-    'name' => $name,
+    'name' => $_SESSION["role"],
     'cells' => 20
 ]);
 
-// Vérifie l'état des joueurs
+$player_id = $sql->db->lastInsertId(); // <- récupère l'ID auto-incrémenté
+$_SESSION["player_id"] = $player_id;   // stocke le vrai ID dans la session
+
+
 $fichier = "../etat_joueurs.json";
 $etat = json_decode(file_get_contents($fichier), true);
 
-// Si les deux joueurs ont choisi leur rôle, redirige vers game.php
 if ($etat["j1"] !== null && $etat["j2"] !== null) {
     header("Location: ../views/game.php");
     exit;
 } else {
-    // Sinon, reste sur la page d'attente
     echo "En attente de l'autre joueur...";
     exit;
 }
