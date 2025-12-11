@@ -153,18 +153,57 @@ $id   = $_SESSION["player_id"] ?? null; // <-- ici
 
           // ÉTAPE 2 — insertion des cases
           const cellReq = await fetch("../scripts/add_ship_cell.php", {
-              method: "POST",
-              headers: {"Content-Type": "application/json"},
-              body: JSON.stringify({
-                  ship_id: ship_id,
-                  positions: selected_positions
-              })
-          });
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                ship_id: ship_id,
+                positions: selected_positions,
+                navire_name: navire_cliqued
+            })
+        });
+
 
           const cellRes = await cellReq.json();
-          console.log("CELLS:", cellRes);
+          if (!cellRes.success) {
+            alert("Erreur : " + cellRes.error);
+          }
 
-          navire_cliqued = null;
+
+          if (!cellRes.success) {
+    // Reset visuel des cases
+    selected_positions.forEach(pos => {
+        const btn = document.querySelector(`.cell[data-x="${pos.x}"][data-y="${pos.y}"]`);
+        if (btn) {
+            btn.style.backgroundColor = "";
+            btn.disabled = false;
+        }
+    });
+
+    selected_positions = [];
+    selected_cells = 0;
+    navire_cliqued = null;
+
+    // Supprimer la classe 'active' sur tous les boutons
+    navireButtons.forEach(b => b.classList.remove('active'));
+
+    // Réactiver uniquement le navire concerné
+    if (cellRes.navire_name) {
+        //btn.disabled = false;
+        const btnNavire = document.querySelector(`#${cellRes.navire_name}`);
+        if (btnNavire) btnNavire.disabled = false;
+    }
+
+    alert("Placement invalide : " + cellRes.error);
+    return;
+}
+
+
+// Si tout est ok, continuer normalement
+navire_cliqued = null;
+selected_positions = [];
+selected_cells = 0;
+
+
       }
     });
   });
